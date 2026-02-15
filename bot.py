@@ -3,6 +3,12 @@ import discord
 from discord.ext import commands
 import requests
 
+@bot.event
+async def on_message(message):
+    print(message.content)
+    await bot.process_commands(message)
+
+
 TOKEN = os.getenv("DISCORD_TOKEN")
 API_URL = "https://metaforge.app/api/arc-raiders/items"
 
