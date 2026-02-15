@@ -9,10 +9,13 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f"Logado como {bot.user}")
+    print(f"Bot online como {bot.user}")
 
-@bot.command()
-async def itens(ctx):
-    await ctx.send("FUNCIONANDO ✅")
+async def load_cogs():
+    await bot.load_extension("cogs.rpg")
+
+@bot.event
+async def setup_hook():
+    await load_cogs()
 
 bot.run(os.getenv("TOKEN"))
