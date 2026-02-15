@@ -7,7 +7,10 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 API_URL = "https://metaforge.app/api/arc-raiders/items"
 
 intents = discord.Intents.default()
+intents.message_content = True
+
 bot = commands.Bot(command_prefix="!", intents=intents)
+
 
 items_cache = []
 
