@@ -1,1 +1,75 @@
-rpg.py
+from discord.ext import commands
+import sqlite3
+import random
+
+class RPG(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.criar_banco()
+
+    def criar_banco(self):
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                user_id INTEGER PRIMARY KEY,
+                xp INTEGER DEFAULT 0,
+                level INTEGER DEFAULT 1,
+                coins INTEGER DEFAULT 0
+            )
+        """)
+        conn.commit()
+        conn.close()
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM users WHERE user_id = ?", (message.author.id,))
+        user = cursor.fetchone()
+
+        if user is None:
+            cursor.execute("INSERT INTO users (user_id) VALUES (?)", (message.author.id,))
+        else:
+            xp = user[1] + random.randint(5, 15)
+            coins = user[3] + random.randint(1, 5)
+
+            level = user[2]
+            if xp >= level * 100:
+                level += 1
+                await message.channel.send(f"🎉 {message.author.mention} subiu para o nível {level}!")
+
+            cursor.execute(
+                "UPDATE users SET xp = ?, level = ?, coins = ? WHERE user_id = ?",
+                (xp, level, coins, message.author.id)
+            )
+
+        conn.commit()
+        conn.close()
+
+    @commands.command()
+    async def perfil(self, ctx):
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT xp, level, coins FROM users WHERE user_id = ?", (ctx.author.id,))
+        user = cursor.fetchone()
+
+        conn.close()
+
+        if user:
+            await ctx.send(
+                f"📊 **Perfil de {ctx.author.name}**\n"
+                f"XP: {user[0]}\n"
+                f"Nível: {user[1]}\n"
+                f"Moedas: {user[2]} 💰"
+            )
+        else:
+            await ctx.send("Você ainda não tem dados.")
+
+async def setup(bot):
+    await bot.add_cog(RPG(bot))
