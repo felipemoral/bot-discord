@@ -18,7 +18,4 @@ async def on_ready():
 async def itens(ctx):
     await ctx.send("FUNCIONANDO ✅")
 
-print("TOKEN:", os.getenv("TOKEN"))
-
-
 bot.run(os.getenv("TOKEN"))
