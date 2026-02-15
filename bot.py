@@ -21,5 +21,4 @@ async def itens(ctx):
 print("TOKEN:", os.getenv("TOKEN"))
 
 
-bot.run(os.getenv("MTQ2OTA5MDA5OTE5Mzk3NDk2NQ.GJ9Qoa.vF9qHXIkq0UDXKNi5PZsBWTK01AHGcNyn53Lhc
-"))
+bot.run(os.getenv("TOKEN"))
