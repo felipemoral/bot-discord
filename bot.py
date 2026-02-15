@@ -1,37 +1,37 @@
-import discord
 import os
-from groq import Groq
+import discord
+from discord.ext import commands
+import requests
 
-TOKEN = os.getenv("DISCORD_TOKEN")
-GROQ_KEY = os.getenv("GROQ_API_KEY")
+TOKEN = os.getenv("MTQ2OTA5MDA5OTE5Mzk3NDk2NQ.GJ9Qoa.vF9qHXIkq0UDXKNi5PZsBWTK01AHGcNyn53Lhc
+")
+API_URL = "https://metaforge.app/api/arc-raiders/items"
 
 intents = discord.Intents.default()
-intents.message_content = True
+bot = commands.Bot(command_prefix="!", intents=intents)
 
-client = discord.Client(intents=intents)
-groq = Groq(api_key=GROQ_KEY)
+items_cache = []
 
-@client.event
+@bot.event
 async def on_ready():
-    print("Bot online")
+    print(f"Bot online como {bot.user}")
+    try:
+        r = requests.get(API_URL)
+        global items_cache
+        items_cache = r.json()
+        print("Itens carregados!")
+    except:
+        print("Erro ao carregar itens.")
 
-@client.event
-async def on_message(message):
-    if message.author.bot:
-        return
+@bot.command()
+async def itens(ctx):
+    if not items_cache:
+        return await ctx.send("Erro ao carregar itens.")
+    
+    mensagem = "📦 Lista de Itens:\n"
+    for item in items_cache[:20]:
+        mensagem += f"- {item.get('name')} ({item.get('rarity')})\n"
+    
+    await ctx.send(mensagem)
 
-    if message.content.startswith("!ia"):
-        texto = message.content.replace("!ia", "").strip()
-
-        if texto == "":
-            await message.channel.send("Digite algo depois de !ia")
-            return
-
-        resposta = groq.chat.completions.create(
-            model="llama3-8b-8192",
-            messages=[{"role": "user", "content": texto}]
-        )
-
-        await message.channel.send(resposta.choices[0].message.content)
-
-client.run(TOKEN)
+bot.run(TOKEN)
