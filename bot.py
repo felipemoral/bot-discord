@@ -3,8 +3,7 @@ import discord
 from discord.ext import commands
 import requests
 
-TOKEN = os.getenv("MTQ2OTA5MDA5OTE5Mzk3NDk2NQ.GJ9Qoa.vF9qHXIkq0UDXKNi5PZsBWTK01AHGcNyn53Lhc
-")
+TOKEN = os.getenv("DISCORD_TOKEN")
 API_URL = "https://metaforge.app/api/arc-raiders/items"
 
 intents = discord.Intents.default()
