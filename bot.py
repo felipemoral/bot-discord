@@ -44,4 +44,6 @@ async def itens(ctx):
     
     await ctx.send(mensagem)
 
-bot.run(TOKEN)
+bot.run("MTQ2OTA5MDA5OTE5Mzk3NDk2NQ.GJ9Qoa.vF9qHXIkq0UDXKNi5PZsBWTK01AHGcNyn53Lhc
+")
+
