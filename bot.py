@@ -9,6 +9,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+
 TOKEN = os.getenv("DISCORD_TOKEN")
 API_URL = "https://metaforge.app/api/arc-raiders/items"
 
