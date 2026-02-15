@@ -27,6 +27,8 @@ async def on_ready():
 
 @bot.command()
 async def itens(ctx):
+    await ctx.send("Comando funcionando ✅")
+
     if not items_cache:
         return await ctx.send("Erro ao carregar itens.")
     
